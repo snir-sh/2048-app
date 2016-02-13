@@ -19,28 +19,32 @@ public class SlidesGame {
     public void moveDown()
     {
     	board.doDown();
-    	board.printBoard();
+//    	board.printBoard();
     }
     public void moveUp()
     {
     	board.doUp();
-    	board.printBoard();
+//    	board.printBoard();
     }
     public void moveLeft()
     {
     	board.doLeft();
-    	board.printBoard();
+//    	board.printBoard();
     	
     }
     public void moveRight()
     {
     	board.doRight();
-    	board.printBoard();
+//    	board.printBoard();
     }
     
     public boolean gameOver()
     {
     	return board.gameOver();
+    }
+    public int getScore()
+    {
+        return board.getScore();
     }
     
     public int[][] getBoard()

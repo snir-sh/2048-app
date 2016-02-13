@@ -1,5 +1,7 @@
 package ex.game2048;
 
+import android.util.Log;
+
 import java.util.Random;
 
 
@@ -8,7 +10,11 @@ public class SlidesBoard {
     private final int SIZE, N;
     private int[][] board;
     private int emptyRow, emptyCol;
-    
+	private int score;
+
+
+
+	// Create a board object by the size that ben given
     public SlidesBoard(int s)
     {
         SIZE = s;
@@ -25,6 +31,8 @@ public class SlidesBoard {
                     emptyCol = j;
                 }
             }
+
+		score = 0;
     }
        
     public int[][] getBoard()
@@ -32,7 +40,8 @@ public class SlidesBoard {
         return board;
     }
     
-   
+
+	// Move the board down
     public void doDown()
     {
     	boolean canMove = false;
@@ -42,8 +51,9 @@ public class SlidesBoard {
     	moveDown();
     	
     	if(canMove || canMove1 )
-    		gnereteRandomNumber();
+			generateRandomNumber();
     }
+	// Move the board up
     public void doUp()
     {
     	boolean canMove = false;
@@ -53,8 +63,9 @@ public class SlidesBoard {
     	moveUp();
     	
     	if(canMove || canMove1 )
-    		gnereteRandomNumber();
+			generateRandomNumber();
     }
+	// Move the board left
     public void doLeft()
     {
     	boolean canMove = false;
@@ -64,9 +75,10 @@ public class SlidesBoard {
     	moveLeft();
     	
     	if(canMove || canMove1 )
-    		gnereteRandomNumber();
+			generateRandomNumber();
     }
-    
+
+	// Move the board right
     public void doRight()
     {
     	boolean canMove = false;
@@ -76,10 +88,10 @@ public class SlidesBoard {
     	moveRight();
     	
     	if(canMove || canMove1 )
-    		gnereteRandomNumber();
+			generateRandomNumber();
     }
     
-   
+   // Attach the board up
     private boolean moveUp()
     {
     	int row=-1, col=-1;
@@ -112,6 +124,7 @@ public class SlidesBoard {
     		}
     	return canMove;
     }
+	// Attach the board down
     private boolean moveDown()
     {
     	int row=-1, col=-1;
@@ -142,7 +155,8 @@ public class SlidesBoard {
     		}
     	
     	return canMove;        	
-    }   
+    }
+	// Attach the board left
     private boolean moveLeft()
     {
     	int row=-1, col=-1;
@@ -172,6 +186,7 @@ public class SlidesBoard {
     		}
     	return canMove;
     }
+	// Attach the board right
     private boolean moveRight()
     {
     	int row =-1, col =-1;
@@ -202,7 +217,7 @@ public class SlidesBoard {
     	return canMove;
     	
     }
-    
+    // Merge numbers down
     public boolean mergeDown()
     {
     	boolean canMove =false;
@@ -213,14 +228,16 @@ public class SlidesBoard {
     			{
     				if(board[i-1][j] == board[i][j])
     				{
-    					board[i][j] = 2*board[i][j]; 
+    					board[i][j] = 2*board[i][j];
+						score +=  board[i][j];
     					board[i-1][j] = EMPTY;
     					canMove = true;
     				}
     			}
     		}
     	return canMove;
-    } 
+    }
+	// Merge numbers left
     private boolean mergeLeft()
     {
     		
@@ -232,14 +249,16 @@ public class SlidesBoard {
     			{
     				if(board[i][j+1] == board[i][j])
     				{
-    					board[i][j] = 2*board[i][j]; 
+    					board[i][j] = 2*board[i][j];
+						score +=  board[i][j];
     					board[i][j+1] = EMPTY;
     					canMove = true;
     				}
     			}
     		}
     	return canMove;
-    }    	
+    }
+	// Merge numbers right
     private boolean mergeRight()
     {
     	boolean canMove = false;
@@ -250,7 +269,8 @@ public class SlidesBoard {
     			{
     				if(board[i][j-1] == board[i][j])
     				{
-    					board[i][j] = 2*board[i][j]; 
+    					board[i][j] = 2*board[i][j];
+						score +=  board[i][j];
     					board[i][j-1] = EMPTY;
     					canMove = true;
     				}
@@ -260,6 +280,7 @@ public class SlidesBoard {
     	
     	
     }
+	// Merge numbers up
     private boolean mergeUp()
     {
     	boolean canMove = false;
@@ -270,7 +291,8 @@ public class SlidesBoard {
     			{
     				if(board[i+1][j] == board[i][j])
     				{
-    					board[i][j] = 2*board[i][j]; 
+    					board[i][j] = 2*board[i][j];
+						score +=  board[i][j];
     					board[i+1][j] = EMPTY;
     					canMove = true;
     				}
@@ -279,15 +301,12 @@ public class SlidesBoard {
     	return canMove;
     }
 
-    
-    private void gnereteRandomNumber()
+
+	// Generate numbers on the board
+    private void generateRandomNumber()
     {
     	Random rand = new Random();
-    	int num =0;
-    	while (num!=2 && num!=4)
-    	{
-    		num = rand.nextInt(SIZE+1);
-    	}
+    	int num = getTwoOrFour();
     	int i=0,j=0;
     	i = rand.nextInt(SIZE);
     	j = rand.nextInt(SIZE);
@@ -300,6 +319,8 @@ public class SlidesBoard {
     	board[i][j] = num;
     	
     }
+
+	// Place the number on board
     private int[] generateRandom()
     {
         int[] res = new int[N];
@@ -308,7 +329,7 @@ public class SlidesBoard {
         for(int i = 0; i < N; i++)
         {
         	if(i<2)
-        		res[i] = 2;
+        		res[i] = getTwoOrFour();
         	else 
         		res[i]=EMPTY;
         }
@@ -324,6 +345,21 @@ public class SlidesBoard {
   
         return res;       
     }
+
+	// Return random number 2 or 4
+	private int getTwoOrFour()
+	{
+		int num = 0;
+		Random rand = new Random();
+		while (num!=2 && num!=4)
+		{
+			num = rand.nextInt(5);
+		}
+		return num;
+	}
+
+
+	// Print the board
     public void printBoard()
     {
     	for(int i=0; i < SIZE; i++)
@@ -334,6 +370,8 @@ public class SlidesBoard {
     	}
     	System.out.println();
     }
+
+	// Check if the game is over
     public boolean gameOver()
     {
     	boolean isFull = checkIfFull();
@@ -351,6 +389,7 @@ public class SlidesBoard {
     	return true;
     
     }
+	// Check if the board is full
     private boolean checkIfFull()
     {
     	for(int i=0; i < SIZE; i++)
@@ -359,4 +398,9 @@ public class SlidesBoard {
     				return false;
     	return true;
     }
+
+	public int getScore()
+	{
+		return score;
+	}
 }
