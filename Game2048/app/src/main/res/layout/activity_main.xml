@@ -30,21 +30,29 @@
         android:layout_above="@+id/linearLayout2"
         android:layout_below="@+id/linearLayout">
 
-        <ImageButton
+        <ImageView
             android:layout_width="100px"
             android:layout_height="100px"
             android:id="@+id/MuteCMD"
-            android:src="@drawable/mute"
-
-          />
+            android:src="@drawable/mute"/>
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="best scores"
+            android:text="best score"
             android:textSize="40sp"
             android:gravity="center"
-            android:id="@+id/BestTxt" />
+            android:id="@+id/BestTxt"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/scoreTxt"
+            android:gravity="center"
+            android:layout_gravity="bottom" />
 
     </LinearLayout>
 
@@ -58,7 +66,7 @@
         android:gravity="center"
        >
 
-        <ImageButton
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/playnow"
