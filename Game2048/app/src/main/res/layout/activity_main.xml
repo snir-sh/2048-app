@@ -3,14 +3,110 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ex.game2048.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:id="@+id/linearLayout"
+        android:weightSum="2"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/linearLayout2">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:src="@drawable/title"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout">
+
+        <ImageButton
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:id="@+id/MuteCMD"
+            android:src="@drawable/mute"
+
+          />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="best scores"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:id="@+id/BestTxt" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:id="@+id/linearLayout2"
+        android:weightSum="1"
+        android:layout_above="@+id/ll3"
+        android:gravity="center"
+       >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/playnow"
+            android:src="@drawable/playnow"
+
+
+
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:id="@+id/ll3"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp"
+
+        android:weightSum="1"
+        >
+
+        <Spinner
+            android:id="@+id/squersSpinner"
+            android:layout_width="0dp"
+            android:layout_height="80px"
+            android:background="#cdcdcd"
+            android:textAlignment="center"
+            android:layout_weight=".5"
+            android:padding="1px"
+            tools:ignore="Suspicious0dp"
+
+            android:dropDownSelector="#fed0d0" />
+
+        <Spinner
+            android:id="@+id/targetSpinner"
+            android:layout_width="0dp"
+            android:padding="1px"
+            android:layout_height="80px"
+            android:background="#cdcdcd"
+            android:textAlignment="center"
+            android:layout_weight=".5"
+            tools:ignore="Suspicious0dp"
+            android:dropDownSelector="#fed0d0"
+            android:layout_gravity="center_horizontal" />
+
+
+    </LinearLayout>
+
 </RelativeLayout>

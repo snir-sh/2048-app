@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name"></string>
+    <string-array name="squersSpinner_arr">
+        <item>4x4</item>
+        <item>5x5</item>
+        <item>6x6</item>
+    </string-array>
+    <string-array name="targetSpinner_arr">
+        <item>1024</item>
+        <item>2048</item>
+        <item>4096</item>
+    </string-array>
 </resources>
