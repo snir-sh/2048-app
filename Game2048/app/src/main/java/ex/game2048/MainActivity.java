@@ -7,6 +7,7 @@ import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -93,6 +94,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
+    protected void onResume() {
+        setScoreInDB();
+        showScore();
+        super.onResume();
+    }
+
+    private void setScoreInDB() {
+        // get the data from sharedPreferences
+        // update Score in dal
+        // save the board int[][] boardArray according the board size^2
+
+        // we need to add a current score in db
+
+        // maybe the set in the db need to be in game_activity.. but still we need the function in the dal
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
     }
@@ -141,7 +160,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showScore()
     {
-        String score = DAL.getScores(squaresSpin.getSelectedItemPosition(), targetSpin.getSelectedItemPosition());
+        int score = DAL.getScores(squaresSpin.getSelectedItemPosition(), targetSpin.getSelectedItemPosition());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("best_score", score);
+        Log.d("score","best score: " + score);
         scoreTxt.setText(getBoardSize() + "x" + getBoardSize() + " " + getBoardTarget() + " " + score);
     }
 

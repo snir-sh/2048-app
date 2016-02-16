@@ -22,6 +22,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     private TextView best_scoreTXT, current_scoreTXT;
     private ImageView restart;
     private final int DEFAULT_SCORE = 0;
+
     private int Bscore, Cscore; // The game scores
 
     @Override
@@ -35,7 +36,6 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
 
         restart.setOnClickListener(this);
         gameView.setOnTouchListener(this);
-
         getScoreFromPreferences();
 
     }
@@ -46,6 +46,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     {
         preferences =  getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         Bscore = preferences.getInt("best_score", DEFAULT_SCORE);
+        Log.d("score", "Bscore in game: " + Bscore);
         Cscore = preferences.getInt("current_score", DEFAULT_SCORE);
 
         String current = "Current\n" + Cscore;
@@ -57,8 +58,11 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
 
     }
 
-
-
+    @Override
+    protected void onResume() {
+        getScoreFromPreferences();
+        super.onResume();
+    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -73,20 +77,15 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
                 Bscore = Cscore;
                 String best = "Best\n" + Bscore;
                 best_scoreTXT.setText(best);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("best_score", Bscore);
+                editor.apply();
             }
         }
         gameView.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
-    public TextView getBest_scoreTXT()
-    {
-        return best_scoreTXT;
-    }
-    public TextView getCurrent_scoreTXT()
-    {
-        return current_scoreTXT;
-    }
 
     @Override
     public void onClick(View v) {

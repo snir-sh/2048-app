@@ -32,7 +32,7 @@ public class GameDAL {
         db.close();
     }
 
-    public String getScores(int size, int target) {
+    public Integer getScores(int size, int target) {
 
         //get DB
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -41,9 +41,9 @@ public class GameDAL {
         if (c!=null) {
             while (c.moveToNext()) {
                 int index = c.getColumnIndex("score");
-                return c.getString(index);
+                return c.getInt(index);
             }
         }
-        return "-";
+        return 0;
     }
 }

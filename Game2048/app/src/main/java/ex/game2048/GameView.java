@@ -31,7 +31,6 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
     private GameRectangle game_board; // The background of the board
     private boolean start = false; // a boolean value to know if the game can start
     private LinkedList<GameRectangle> board; // List of the rectangles of the board
-//    private float x1,x2,y1,y2; // Params of the touch event
     private static final int DEFAULT_BOARD_SIZE = 4;
 
 
@@ -122,6 +121,8 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
 
 
     }
+
+    // Create the background board
     private void createGameBoard()
     {
         Paint board_paint = new Paint();
