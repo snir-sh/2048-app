@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("board_size", getBoardSize());
         editor.putInt("board_target", getBoardTarget());
+        editor.putInt("current_score",0);
         editor.apply();
 
         Intent intent = new Intent(this, game_activity.class);
