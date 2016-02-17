@@ -77,15 +77,22 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
                 Bscore = Cscore;
                 String best = "Best\n" + Bscore;
                 best_scoreTXT.setText(best);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt("best_score", Bscore);
-                editor.apply();
+
             }
+
         }
         gameView.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
+    @Override
+    protected void onPause() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("current_score",Cscore);
+        editor.putInt("best_score", Bscore);
+        editor.apply();
+        super.onPause();
+    }
 
     @Override
     public void onClick(View v) {
