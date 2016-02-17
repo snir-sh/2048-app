@@ -72,7 +72,7 @@ public class GameRectangle {
                 color = Color.parseColor("#FFFAFA");
                 break;
             case 8:
-                color = Color.rgb( 255, 178, 102);
+                color = Color.rgb(255, 178, 102);
                 break;
             case 16:
                 color = Color.parseColor("#F4A460");
@@ -93,11 +93,18 @@ public class GameRectangle {
                 color = Color.parseColor("#DAA520");
                 break;
             case 1024:
-                color = Color.parseColor("#B8860B0");
+                color = Color.parseColor("#f75461");
                 break;
             case 2048:
                 color = Color.parseColor("#FF0000");
                 break;
+            case 4096:
+                color = Color.parseColor("#fc9fa6");
+                break;
+            case 8192:
+                color = Color.parseColor("#cdf78a");
+                break;
+
         }
 
         return color;
