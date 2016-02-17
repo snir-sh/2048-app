@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -230,5 +231,7 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
         return true;
     }
 
-
+    public LinkedList<GameRectangle> getBoard() {
+        return board;
+    }
 }
