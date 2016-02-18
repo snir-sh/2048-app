@@ -9,10 +9,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:id="@+id/linearLayout"
+        android:id="@+id/TopLayout"
         android:weightSum="2"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/linearLayout2">
+        android:layout_alignStart="@+id/PlayLayout">
 
         <ImageView
             android:layout_width="match_parent"
@@ -24,42 +24,67 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout2"
-        android:layout_below="@+id/linearLayout"
-        android:weightSum="4"
-        android:padding="10px">
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:id="@+id/IconsLayout"
+        android:layout_below="@+id/TopLayout">
 
         <ImageView
-
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:id="@+id/MuteCMD"
-            android:src="@drawable/mute"
-            android:layout_gravity="left|top"
-            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/ConfCMD"
+            android:src="@drawable/conf2"
             />
 
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/InfoCMD"
+            android:src="@drawable/info2"
+            />
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/DeleteCMD"
+            android:src="@drawable/delete2"
+            />
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:id="@+id/MuteCMD"
+            android:tag="1"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/BodyLayout"
+        android:layout_above="@+id/PlayLayout"
+        android:weightSum="2"
+        android:layout_below="@+id/IconsLayout">
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="best score"
             android:textSize="40sp"
             android:gravity="center"
             android:id="@+id/BestTxt"
-            android:layout_gravity="center"
-            android:layout_weight="2"/>
+            android:layout_weight="0.76"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
             android:id="@+id/scoreTxt"
             android:gravity="center"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -67,36 +92,28 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:id="@+id/linearLayout2"
+        android:layout_height="100dp"
+        android:id="@+id/PlayLayout"
         android:weightSum="1"
-        android:layout_above="@+id/ll3"
-        android:gravity="center"
-       >
+        android:layout_above="@+id/BottomLayout"
+        android:gravity="center">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/playnow"
-            android:src="@drawable/playnow"
-
-
-
-
-            />
+            android:src="@drawable/playnow" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ll3"
+        android:id="@+id/BottomLayout"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:padding="10dp"
-
-        android:weightSum="1"
-        >
+        android:weightSum="1">
 
         <Spinner
             android:id="@+id/squersSpinner"

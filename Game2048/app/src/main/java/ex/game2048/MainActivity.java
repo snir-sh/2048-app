@@ -1,38 +1,36 @@
 package ex.game2048;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.util.concurrent.SynchronousQueue;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private ImageView PlayNow;
-    private ImageView MuteCMD;
+    private ImageView MuteCMD, ConfCMD, InfoCMD;
     private MediaPlayer mp;
     private boolean MuteStatus = false;
+    private boolean LayoutHidden = true;
     private Spinner squaresSpin, targetSpin;
     private SharedPreferences preferences; //SharedPreferences for the settings and more
     private final int DEFAULT_TARGET = 1; //0 mean 1024, 1 mean 2048, 2 mean 4096
     private final int DEFAULT_SQURES = 0; //0 mean 4x4, 1 mean 5x5, 2 mean 6x6
     private GameDAL DAL;
     private TextView scoreTxt;
+    private LinearLayout BottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +39,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         PlayNow = (ImageView)findViewById(R.id.playnow);
         MuteCMD = (ImageView)findViewById(R.id.MuteCMD);
+        InfoCMD = (ImageView)findViewById(R.id.InfoCMD);
+        ConfCMD = (ImageView)findViewById(R.id.ConfCMD);
         targetSpin = (Spinner)findViewById(R.id.targetSpinner);
         squaresSpin = (Spinner)findViewById(R.id.squersSpinner);
         scoreTxt = (TextView)findViewById(R.id.scoreTxt);
+        BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
 
         preferences = getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         DAL = new GameDAL(this);
@@ -61,7 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         targetSpin.setSelection(DEFAULT_TARGET);
         PlayNow.setOnClickListener(this);
         MuteCMD.setOnClickListener(this);
-
+        InfoCMD.setOnClickListener(this);
+        ConfCMD.setOnClickListener(this);
+        MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        BottomLayout.setVisibility(LinearLayout.INVISIBLE);
         playMusic();
         showScore();
     }
@@ -70,20 +74,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == PlayNow.getId())
             playNow();
+        else if(v.getId() == ConfCMD.getId())
+            confLayout();
         else if(v.getId() == MuteCMD.getId())
         {
-            if (MuteStatus) {
-                mp.start();
-                MuteStatus = false;
-
-            }
-            else {
-                if (mp != null)
+                if (Integer.parseInt(MuteCMD.getTag().toString()) == 1)
                 {
                     mp.pause();
                     MuteStatus = true;
+                    MuteCMD.setBackgroundResource(R.drawable.mute2);
+                    MuteCMD.setTag(2);
                 }
-            }
+                else {
+                    mp.start();
+                    MuteStatus = false;
+                    MuteCMD.setBackgroundResource(R.drawable.unmute2);
+                    MuteCMD.setTag(1);
+                }
+        }
+        else if(v.getId() == InfoCMD.getId())
+        {
+            infoDialog();
         }
     }
 
@@ -114,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
+        mp.pause();
+        MuteStatus = true;
     }
 
     @Override
@@ -166,6 +179,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putInt("best_score", score);
         Log.d("score","best score: " + score);
         scoreTxt.setText(getBoardSize() + "x" + getBoardSize() + " " + getBoardTarget() + " " + score);
+    }
+
+    private void infoDialog()
+    {
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+        dlgAlert.setMessage("infooooooooooooooooooooooooooooooooooooo");
+        dlgAlert.setTitle("Information");
+        dlgAlert.setPositiveButton("OK", null);
+        dlgAlert.setCancelable(true);
+        dlgAlert.create().show();
+    }
+
+    private void confLayout()
+    {
+        if(LayoutHidden) {
+            BottomLayout.setVisibility(LinearLayout.VISIBLE);
+            LayoutHidden = false;
+        }
+        else {
+            BottomLayout.setVisibility(LinearLayout.INVISIBLE);
+            LayoutHidden = true;
+        }
     }
 
 }
