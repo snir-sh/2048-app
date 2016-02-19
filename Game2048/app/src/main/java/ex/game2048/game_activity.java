@@ -60,13 +60,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         getScoreFromPreferences();
         super.onResume();
     }
-
-    @Override
-    public void OnDestroy() {
-        getScoreFromPreferences();
-        super.onResume();
-    }
-
+    
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(gameView.onTouchEvent(event))
