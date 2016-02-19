@@ -11,7 +11,8 @@ public class GameDB extends SQLiteOpenHelper{
     private static final String TABLE_NAME = "SCORES";
     private static final String COL_SIZE = "size";
     private static final String COL_TARGET = "target";
-    private static final String COL_SCORE = "score";
+    private static final String COL_BSCORE = "score";
+    private static final String COL_CSCORE = "score";
 
     public GameDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -23,7 +24,8 @@ public class GameDB extends SQLiteOpenHelper{
                 "CREATE TABLE " + TABLE_NAME  + " ( " +
                         COL_SIZE + " INTEGER," +
                         COL_TARGET + " INTEGER," +
-                        COL_SCORE + " INTEGER" +
+                        COL_BSCORE + " INTEGER," +
+                        COL_CSCORE + " INTEGER" +
                         ");"
         );
     }
