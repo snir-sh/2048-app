@@ -29,8 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int DEFAULT_TARGET = 1; //0 mean 1024, 1 mean 2048, 2 mean 4096
     private final int DEFAULT_SQURES = 0; //0 mean 4x4, 1 mean 5x5, 2 mean 6x6
     private GameDAL DAL;
-    private TextView scoreTxt;
+    private TextView scoreTxt, bestTXT;
     private LinearLayout BottomLayout;
+    private int Bscore, target , size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         squaresSpin = (Spinner)findViewById(R.id.squersSpinner);
         scoreTxt = (TextView)findViewById(R.id.scoreTxt);
         BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
-
+        bestTXT = (TextView)findViewById(R.id.BestTxt);
         preferences = getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         DAL = new GameDAL(this);
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MuteCMD.setBackgroundResource(R.drawable.unmute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
         playMusic();
+        getScoreFromDB();
         showScore();
     }
 
@@ -106,19 +108,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-        setScoreInDB();
+        getPrefes();
         showScore();
         super.onResume();
     }
 
+    private void getPrefes()
+    {
+        Bscore = preferences.getInt("best_score",0);
+        size = preferences.getInt("board_size", 4);
+        target = preferences.getInt("target",1024);
+
+    }
+    private void getScoreFromDB() {
+
+        target = getBoardTarget();
+        size = getBoardSize();
+        Bscore = DAL.getBscore(size, target);
+
+    }
+
     private void setScoreInDB() {
-        // get the data from sharedPreferences
-        // update Score in dal
-        // save the board int[][] boardArray according the board size^2
+        int bScore = preferences.getInt("best_score",0);
+        int board_size = preferences.getInt("board_size", 4);
+        int target = preferences.getInt("target",1024);
+        DAL.insert(board_size, target, bScore);
+    }
 
-        // we need to add a current score in db
-
-        // maybe the set in the db need to be in game_activity.. but still we need the function in the dal
+    @Override
+    protected void onPause() {
+        super.onPause();
+        setScoreInDB();
 
     }
 
@@ -174,11 +194,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showScore()
     {
-        int score = DAL.getBscore(squaresSpin.getSelectedItemPosition(), targetSpin.getSelectedItemPosition());
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("best_score", score);
-        Log.d("score","best score: " + score);
-        scoreTxt.setText(getBoardSize() + "x" + getBoardSize() + " " + getBoardTarget() + " " + score);
+        editor.putInt("best_score", Bscore);
+        bestTXT.setText("Best " + Bscore +"");
+        scoreTxt.setText(getBoardSize() + "x" + getBoardSize() + " " + getBoardTarget() + " " + Bscore);
     }
 
     private void infoDialog()

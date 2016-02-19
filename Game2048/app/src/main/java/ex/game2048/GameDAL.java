@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -15,18 +16,26 @@ public class GameDAL {
         helper = new GameDB(context);
     }
 
-    public void insert(int size, int target, int Bscore, int Cscore)
+    public void insert(int size, int target, int Bscore)
     {
         //get DB
         SQLiteDatabase db = helper.getWritableDatabase();
 
         //values to save
         ContentValues values = new ContentValues();
-
+        values.put("score", Bscore);
+        int num = getBscore(size, target);
+        if(num != 0)
+        {
+            String where = "size" + "=? and " + "target" +"=?" ;
+            String[] args = {size +"",target+""};
+            db.update("SCORES", values, where ,args);
+            db.close();
+            return;
+        }
         values.put("size", size);
         values.put("target", target);
-        values.put("Bscore", Bscore);
-        values.put("Cscore", Cscore);
+
 
         //save the values
         db.insert("SCORES", null, values);
@@ -41,24 +50,11 @@ public class GameDAL {
 
         if (c!=null) {
             while (c.moveToNext()) {
-                int index = c.getColumnIndex("Bscore");
+                int index = c.getColumnIndex("score");
                 return c.getInt(index);
             }
         }
         return 0;
     }
-    public Integer getCscore(int size, int target) {
 
-        //get DB
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM SCORES WHERE size=" + size + " and target=" + target +";", null);
-
-        if (c!=null) {
-            while (c.moveToNext()) {
-                int index = c.getColumnIndex("Cscore");
-                return c.getInt(index);
-            }
-        }
-        return 0;
-    }
 }
