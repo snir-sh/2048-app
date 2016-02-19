@@ -1,11 +1,5 @@
-package ex.game2048;/*/
+package ex.game2048;
 
-import ex.game2048.SlidesBoard;
-
-/**
- *
- * @author Ilya Shmilove
- */
 public class SlidesGame {
     private SlidesBoard board;
     public final int SIZE;

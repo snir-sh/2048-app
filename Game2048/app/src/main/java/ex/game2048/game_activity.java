@@ -37,9 +37,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         restart.setOnClickListener(this);
         gameView.setOnTouchListener(this);
         getScoreFromPreferences();
-
     }
-
 
 
     private void getScoreFromPreferences()
@@ -55,11 +53,16 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         best_scoreTXT.setText(best);
 
         gameView.getScore();
-
     }
 
     @Override
     protected void onResume() {
+        getScoreFromPreferences();
+        super.onResume();
+    }
+
+    @Override
+    public void OnDestroy() {
         getScoreFromPreferences();
         super.onResume();
     }
@@ -79,8 +82,8 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
                 best_scoreTXT.setText(best);
 
             }
-
         }
+
         gameView.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
