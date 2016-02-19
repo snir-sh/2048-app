@@ -15,7 +15,7 @@ public class GameDAL {
         helper = new GameDB(context);
     }
 
-    public void insert(int size, int target, int score)
+    public void insert(int size, int target, int Bscore, int Cscore)
     {
         //get DB
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -25,14 +25,15 @@ public class GameDAL {
 
         values.put("size", size);
         values.put("target", target);
-        values.put("score", score);
+        values.put("Bscore", Bscore);
+        values.put("Cscore", Cscore);
 
         //save the values
         db.insert("SCORES", null, values);
         db.close();
     }
 
-    public Integer getScores(int size, int target) {
+    public Integer getBscore(int size, int target) {
 
         //get DB
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -40,7 +41,21 @@ public class GameDAL {
 
         if (c!=null) {
             while (c.moveToNext()) {
-                int index = c.getColumnIndex("score");
+                int index = c.getColumnIndex("Bscore");
+                return c.getInt(index);
+            }
+        }
+        return 0;
+    }
+    public Integer getCscore(int size, int target) {
+
+        //get DB
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM SCORES WHERE size=" + size + " and target=" + target +";", null);
+
+        if (c!=null) {
+            while (c.moveToNext()) {
+                int index = c.getColumnIndex("Cscore");
                 return c.getInt(index);
             }
         }

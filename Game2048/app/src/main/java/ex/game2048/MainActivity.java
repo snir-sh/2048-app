@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showScore()
     {
-        int score = DAL.getScores(squaresSpin.getSelectedItemPosition(), targetSpin.getSelectedItemPosition());
+        int score = DAL.getBscore(squaresSpin.getSelectedItemPosition(), targetSpin.getSelectedItemPosition());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("best_score", score);
         Log.d("score","best score: " + score);
