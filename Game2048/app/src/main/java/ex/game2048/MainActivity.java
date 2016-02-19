@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         target = getBoardTarget();
         size = getBoardSize();
         Bscore = DAL.getBscore(size, target);
+        Log.d("score", "getScoreFromDB " + Bscore);
+        if (Bscore == -1)
+            Bscore = 0;
 
     }
 
@@ -151,7 +154,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        setScoreInDB();
+        setPrefes();
     }
 
     @Override
@@ -160,12 +164,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void playNow() {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("board_size", getBoardSize());
-        editor.putInt("board_target", getBoardTarget());
-        editor.putInt("current_score",0);
-        editor.apply();
 
+        setPrefes();
         Intent intent = new Intent(this, game_activity.class);
         startActivity(intent);
 
@@ -194,8 +194,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showScore()
     {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("best_score", Bscore);
         bestTXT.setText("Best " + Bscore +"");
         scoreTxt.setText(getBoardSize() + "x" + getBoardSize() + " " + getBoardTarget() + " " + Bscore);
     }
@@ -220,6 +218,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BottomLayout.setVisibility(LinearLayout.INVISIBLE);
             LayoutHidden = true;
         }
+    }
+    private void setPrefes()
+    {
+        getScoreFromDB();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("board_size", getBoardSize());
+        editor.putInt("board_target", getBoardTarget());
+        editor.putInt("best_score", Bscore);
+        editor.apply();
+
     }
 
 }

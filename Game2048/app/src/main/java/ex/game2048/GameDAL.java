@@ -25,7 +25,7 @@ public class GameDAL {
         ContentValues values = new ContentValues();
         values.put("score", Bscore);
         int num = getBscore(size, target);
-        if(num != 0)
+        if(num != -1)
         {
             String where = "size" + "=? and " + "target" +"=?" ;
             String[] args = {size +"",target+""};
@@ -54,7 +54,7 @@ public class GameDAL {
                 return c.getInt(index);
             }
         }
-        return 0;
+        return -1;
     }
 
 }

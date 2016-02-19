@@ -45,9 +45,8 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         preferences =  getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         Bscore = preferences.getInt("best_score", DEFAULT_SCORE);
         Log.d("score", "Bscore in game: " + Bscore);
-        Cscore = preferences.getInt("current_score", DEFAULT_SCORE);
 
-        String current = "Current\n" + Cscore;
+        String current = "Current\n" + 0;
         String best = "Best\n" + Bscore;
         current_scoreTXT.setText(current);
         best_scoreTXT.setText(best);
@@ -85,7 +84,6 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     @Override
     protected void onPause() {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("current_score",Cscore);
         editor.putInt("best_score", Bscore);
         editor.apply();
         super.onPause();
