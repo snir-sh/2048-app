@@ -23,7 +23,7 @@ public class GameDAL {
 
         //values to save
         ContentValues values = new ContentValues();
-        values.put("score", Bscore);
+        values.put("best_score", Bscore);
         int num = getBscore(size, target);
         if(num != -1)
         {
@@ -33,8 +33,8 @@ public class GameDAL {
             db.close();
             return;
         }
-        values.put("size", size);
-        values.put("target", target);
+        values.put("board_size", size);
+        values.put("board_target", target);
 
 
         //save the values

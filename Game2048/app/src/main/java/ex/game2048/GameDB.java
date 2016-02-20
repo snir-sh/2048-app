@@ -24,8 +24,8 @@ public class GameDB extends SQLiteOpenHelper{
                 "CREATE TABLE " + TABLE_NAME  + " ( " +
                         COL_SIZE + " INTEGER," +
                         COL_TARGET + " INTEGER," +
-                        COL_BSCORE + " INTEGER" +
-                        ");"
+                        COL_BSCORE + " INTEGER," +
+                        "primary key (" + COL_SIZE + "," + COL_BSCORE +"));"
         );
     }
 
