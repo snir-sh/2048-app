@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MuteCMD.setBackgroundResource(R.drawable.unmute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
         playMusic();
-     //   getScoreFromDB();
+        getScoreFromDB();
      //   showScore();
     }
 
@@ -114,7 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
+        Log.d("score","onResume");
         getPrefes();
+        setScoreInDB();
      //   getScoreFromDB();
     //    showScore();
         squaresSpin.setSelection(getBoardSize(size));
@@ -126,9 +128,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Bscore = preferences.getInt("best_score",0);
         size = preferences.getInt("board_size", 4);
         target = preferences.getInt("board_target",2048);
+        Log.d("score","getPrefes Bscore: " + Bscore + " size " + size + " target " + target);
     }
 
     private void getScoreFromDB() {
+//        getPrefes();
         Bscore = DAL.getBscore(size, target);
         Log.d("score", "getScoreFromDB " + Bscore);
         if (Bscore == -1)
@@ -140,12 +144,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int bScore = preferences.getInt("best_score",0);
         int board_size = preferences.getInt("board_size", 4);
         int target = preferences.getInt("board_target",2048);
+
+        Log.d("score", "setScoreinDB " + bScore);
         DAL.insert(board_size, target, bScore);
     }
 
     @Override
     protected void onPause() {
-     //   setScoreInDB();
+        Log.d("score","onPause");
+        setScoreInDB();
         super.onPause();
     }
 
@@ -231,6 +238,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setPrefes() {
         //    getScoreFromDB();
+
+        size = getBoardSize(squaresSpin.getSelectedItemPosition());
+        target = getBoardTarget(targetSpin.getSelectedItemPosition());
+        getScoreFromDB();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("board_size", size);
         editor.putInt("board_target", target);
