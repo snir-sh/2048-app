@@ -24,23 +24,23 @@
         android:layout_width="200px"
         android:layout_height="wrap_content"
         android:id="@+id/best_scoreTXT"
-        android:padding="50px"
+        android:padding="30px"
         android:text="Best\n 0"
-       android:layout_marginTop="40px"
+        android:layout_marginTop="40px"
         android:layout_marginRight="20px"
         android:textColor="#cd0303"
         android:background="#ffe69c"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:textAlignment="center"
+        android:gravity="right"
         />
     <TextView
         android:layout_width="200px"
         android:layout_height="wrap_content"
         android:text="Current\n 0"
         android:id="@+id/current_scoreTXT"
-        android:padding="50px"
-        android:layout_marginLeft="150px"
+        android:padding="30px"
         android:textColor="#cd0303"
         android:background="#ffe69c"
         android:layout_alignTop="@+id/best_scoreTXT"
@@ -61,7 +61,7 @@
         android:textStyle="bold"
         android:background="#c59284"
         android:textSize="50px"
-
+        android:gravity="left"
         android:layout_alignParentStart="true" />
 
     <ImageView
