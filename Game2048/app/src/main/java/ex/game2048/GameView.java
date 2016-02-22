@@ -32,7 +32,7 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
     private GameRectangle game_board; // The background of the board
     private boolean start = false; // a boolean value to know if the game can start
     private LinkedList<GameRectangle> board; // List of the rectangles of the board
-    private static final int DEFAULT_BOARD_SIZE = 4;
+
 
 
     public GameView(Context context) {
@@ -54,7 +54,7 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
     private void init(Context context)
     {
         preferences = context.getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
-        board_size = preferences.getInt("board_size", DEFAULT_BOARD_SIZE);
+        board_size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
         game = new SlidesGame(board_size);
 
 

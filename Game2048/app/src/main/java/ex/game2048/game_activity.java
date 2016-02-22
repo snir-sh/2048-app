@@ -24,19 +24,31 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     private final int DEFAULT_SCORE = 0;
 
     private int Bscore, Cscore; // The game scores
+    private ImageView MuteCMD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(!MusicManager.BGMusic)
+            MusicManager.pause();
+
         setContentView(R.layout.activity_game_activity);
         gameView = (GameView)findViewById(R.id.gameView);
         best_scoreTXT = (TextView)findViewById(R.id.best_scoreTXT);
         current_scoreTXT = (TextView)findViewById(R.id.current_scoreTXT);
         restart = (ImageView)findViewById(R.id.restart_icon);
-
+        MuteCMD = (ImageView)findViewById(R.id.MuteCMD);
         restart.setOnClickListener(this);
         gameView.setOnTouchListener(this);
+        MuteCMD.setOnClickListener(this);
+
+        if (MusicManager.BGMusic)
+            MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        else
+            MuteCMD.setBackgroundResource(R.drawable.mute2);
         getScoreFromPreferences();
+
     }
 
 
@@ -56,8 +68,14 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
 
     @Override
     protected void onResume() {
-        getScoreFromPreferences();
         super.onResume();
+        if (MusicManager.BGMusic)
+            MusicManager.start(this,R.raw.thrones);
+        getScoreFromPreferences();
+        if (MusicManager.BGMusic)
+            MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        else
+            MuteCMD.setBackgroundResource(R.drawable.mute2);
     }
     
     @Override
@@ -83,12 +101,21 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
 
     @Override
     protected void onPause() {
+        super.onPause();
+        if (!MusicManager.BGMusic)
+            MusicManager.pause();
+
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("best_score", Bscore);
         editor.apply();
-        super.onPause();
+
     }
 
+    @Override
+    protected void onStop() {
+        MusicManager.pause();
+        super.onStop();
+    }
     @Override
     public void onClick(View v) {
         if(v.getId() == restart.getId())
@@ -96,6 +123,24 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
             String current = "Current\n" + Cscore;
             current_scoreTXT.setText(current);
             gameView.reStartGame();
+        }
+        else if(v.getId() == MuteCMD.getId())
+            muteUnMute();
+    }
+
+    private void muteUnMute() {
+        if (Integer.parseInt(MuteCMD.getTag().toString()) == 1)
+        {
+            MusicManager.BGMusic = false;
+            MusicManager.pause();
+            MuteCMD.setBackgroundResource(R.drawable.mute2);
+            MuteCMD.setTag(2);
+        }
+        else {
+            MusicManager.BGMusic = true;
+            MusicManager.start(this,R.raw.thrones);
+            MuteCMD.setBackgroundResource(R.drawable.unmute2);
+            MuteCMD.setTag(1);
         }
     }
 

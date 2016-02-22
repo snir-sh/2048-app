@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,19 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private ImageView PlayNow;
     private ImageView MuteCMD, ConfCMD, InfoCMD;
-    private MediaPlayer mp;
     private boolean MuteStatus = false;
     private boolean LayoutHidden = true;
-    private Spinner squaresSpin, targetSpin;
+    private Spinner squaresSpin;
     private SharedPreferences preferences; //SharedPreferences for the settings and more
-    //private final int DEFAULT_TARGET = 1; //0 mean 1024, 1 mean 2048, 2 mean 4096 --- only on the spinner
-    private final int DEFAULT_SQURES = 0; //0 mean 4x4, 1 mean 5x5, 2 mean 6x6  --- only on the spinner
     private GameDAL DAL;
     private TextView scoreTxt, bestTxt;
     private LinearLayout BottomLayout;
@@ -42,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MuteCMD = (ImageView)findViewById(R.id.MuteCMD);
         InfoCMD = (ImageView)findViewById(R.id.InfoCMD);
         ConfCMD = (ImageView)findViewById(R.id.ConfCMD);
-//        targetSpin = (Spinner)findViewById(R.id.targetSpinner);
         squaresSpin = (Spinner)findViewById(R.id.squersSpinner);
         scoreTxt = (TextView)findViewById(R.id.scoreTxt);
         BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
@@ -50,18 +43,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         preferences = getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         DAL = new GameDAL(this);
 
+        Settings.initializeSettings(getApplicationContext());
+
+
         String[] squareArray = getResources().getStringArray(R.array.squersSpinner_arr);
-//        String[] targetArray = getResources().getStringArray(R.array.targetSpinner_arr);
 
         ArrayAdapter<String> squareAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,squareArray);
-//        ArrayAdapter<String> targetAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,targetArray);
 
         squaresSpin.setAdapter(squareAdapter);
-//        targetSpin.setAdapter(targetAdapter);
-
         getPrefes();
         squaresSpin.setSelection(getBoardSize(size));
-//        targetSpin.setSelection(getBoardTarget(target));
 
         PlayNow.setOnClickListener(this);
         MuteCMD.setOnClickListener(this);
@@ -69,9 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ConfCMD.setOnClickListener(this);
 
         squaresSpin.setOnItemSelectedListener(this);
-//        targetSpin.setOnItemSelectedListener(this);
-
-        MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        if (MusicManager.BGMusic)
+            MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        else
+            MuteCMD.setBackgroundResource(R.drawable.mute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
         playMusic();
         getScoreFromDB();
@@ -91,21 +83,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void playMusic() {
-        mp = MediaPlayer.create(this, R.raw.thrones);
-        mp.start();
+        MusicManager.BGMusic = true;
     }
 
     private void muteUnMute() {
         if (Integer.parseInt(MuteCMD.getTag().toString()) == 1)
         {
-            mp.pause();
-            MuteStatus = true;
+            MusicManager.BGMusic = false;
+            MusicManager.pause();
             MuteCMD.setBackgroundResource(R.drawable.mute2);
             MuteCMD.setTag(2);
         }
         else {
-            mp.start();
-            MuteStatus = false;
+            MusicManager.BGMusic = true;
+            MusicManager.start(this,R.raw.thrones);
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
             MuteCMD.setTag(1);
         }
@@ -114,25 +105,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-        Log.d("score","onResume");
+        super.onResume();
+        if (MusicManager.BGMusic)
+            MusicManager.start(this,R.raw.thrones);
         getPrefes();
         setScoreInDB();
         showScore();
         squaresSpin.setSelection(getBoardSize(size));
-//        targetSpin.setSelection(getBoardTarget(target));
-        super.onResume();
+        if (MusicManager.BGMusic)
+            MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        else
+            MuteCMD.setBackgroundResource(R.drawable.mute2);
+        BottomLayout.setVisibility(LinearLayout.INVISIBLE);
     }
 
     private void getPrefes() {
         Bscore = preferences.getInt("best_score",0);
-        size = preferences.getInt("board_size", 4);
-//        target = preferences.getInt("board_target",2048);
-        Log.d("score","getPrefes Bscore: " + Bscore + " size " + size);
+        size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
+    }
+
+    private void setPrefes() {
+
+        size = getBoardSize(squaresSpin.getSelectedItemPosition());
+        getScoreFromDB();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("board_size", size);
+        editor.putInt("best_score", Bscore);
+        editor.apply();
     }
 
     private void getScoreFromDB() {
         Bscore = DAL.getBscore(size);
-        Log.d("score", "getScoreFromDB " + Bscore);
         if (Bscore == -1)
             Bscore = 0;
 
@@ -140,39 +143,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setScoreInDB() {
         int bScore = preferences.getInt("best_score",0);
-        int board_size = preferences.getInt("board_size", 4);
-//        int target = preferences.getInt("board_target",2048);
-
-        Log.d("score", "setScoreinDB " + bScore);
+        int board_size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
         DAL.insert(board_size, bScore);
     }
 
     @Override
     protected void onPause() {
-        Log.d("score","onPause");
         setScoreInDB();
+        if(!MusicManager.BGMusic)
+            MusicManager.pause();
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        mp.pause();
-        MuteStatus = true;
+        MusicManager.pause();
         super.onStop();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        //Configuring size and target after changes
         size = getBoardSize(squaresSpin.getSelectedItemPosition());
-//        target = getBoardTarget(targetSpin.getSelectedItemPosition());
-
         setPrefes();
         getScoreFromDB();
         showScore();
-
-
     }
 
     @Override
@@ -194,21 +188,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 5: return 1;
             case 6: return 2;
         }
-        return DEFAULT_SQURES;
+        return Settings.DEFAULT_SQURES;
     }
 
-//    private int getBoardTarget(int t)
-//    {
-//        switch (t) {
-//            case 0: return 1024;
-//            case 1: return 2048;
-//            case 2: return 4096;
-//            case 1024: return 0;
-//            case 2048: return 1;
-//            case 4096: return 2;
-//        }
-//        return DEFAULT_TARGET;
-//    }
 
     private void showScore()
     {
@@ -237,16 +219,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setPrefes() {
-        //    getScoreFromDB();
-
-        size = getBoardSize(squaresSpin.getSelectedItemPosition());
-//        target = getBoardTarget(targetSpin.getSelectedItemPosition());
-        getScoreFromDB();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("board_size", size);
-//        editor.putInt("board_target", target);
-        editor.putInt("best_score", Bscore);
-        editor.apply();
-    }
 }
