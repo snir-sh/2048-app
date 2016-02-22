@@ -1,7 +1,5 @@
 package ex.game2048;
 
-import android.content.Context;
-
 /**
  * Created by Ilya on 2/22/2016.
  * Class for finals of the game app

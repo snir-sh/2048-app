@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,9 +18,9 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     private TextView best_scoreTXT, current_scoreTXT;  // The texts in the activity
     private ImageView restart;
 
-
     private int Bscore, Cscore; // The game scores
     private ImageView MuteCMD;
+    private boolean moveStatus = false;
 
 
     // Initialize all the activity elements
@@ -67,15 +66,24 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     @Override
     protected void onResume() {
         super.onResume();
-        if (MusicManager.BGMusic)
-            MusicManager.start(this,R.raw.thrones);
         getScoreFromPreferences();
-        if (MusicManager.BGMusic)
+        if (MusicManager.BGMusic) {
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        }
         else
+        {
             MuteCMD.setBackgroundResource(R.drawable.mute2);
+            MusicManager.pause();
+        }
+
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        moveStatus = true;
+    }
 
     // Sends all touch events in the view to the game view class and update according the answer
     @Override
@@ -101,19 +109,28 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     @Override
     protected void onPause() {
         super.onPause();
-        if (!MusicManager.BGMusic)
-            MusicManager.pause();
-
+        if (moveStatus && MusicManager.BGMusic)
+        {
+            moveStatus = false;
+            return;
+        }
+        MusicManager.pause();
+        MusicManager.BGMusic = false;
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("best_score", Bscore);
         editor.apply();
-
     }
 
     @Override
     protected void onStop() {
-        MusicManager.pause();
         super.onStop();
+        if (moveStatus && MusicManager.BGMusic)
+        {
+            moveStatus = false;
+            return;
+        }
+        MusicManager.BGMusic = false;
+        MusicManager.pause();
     }
 
     // Listener for touch events if we need to restart the game or to mute the music

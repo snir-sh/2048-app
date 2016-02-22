@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout BottomLayout;
     private int Bscore, size;
     private boolean resetScore = false;
+    private boolean moveStatus = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         squaresSpin.setOnItemSelectedListener(this);
 
         // Check if the music button is mute or not
-        if (MusicManager.BGMusic)
+        if (MusicManager.BGMusic) {
+            playMusic();
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
+        }
         else
             MuteCMD.setBackgroundResource(R.drawable.mute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
 
-        playMusic();
         getPrefes();
         getScoreFromDB();
         showScore();
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void playMusic() {
         MusicManager.BGMusic = true;
+        MusicManager.start(this, R.raw.thrones);
     }
 
     private void muteUnMute() {
@@ -99,25 +102,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MuteCMD.setTag(2);
         }
         else {
-            MusicManager.BGMusic = true;
-            MusicManager.start(this,R.raw.thrones);
+            playMusic();
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
             MuteCMD.setTag(1);
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        if (MusicManager.BGMusic)
-            MusicManager.start(this,R.raw.thrones);
         getPrefes();
         setScoreInDB();
         showScore();
         squaresSpin.setSelection(getBoardSize(size));
-        if (MusicManager.BGMusic)
+        if (MusicManager.BGMusic) {
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
+            MusicManager.start(this, R.raw.thrones);
+        }
         else
             MuteCMD.setBackgroundResource(R.drawable.mute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
@@ -162,16 +163,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onPause() {
-        setScoreInDB();
-        if(!MusicManager.BGMusic)
-            MusicManager.pause();
         super.onPause();
+        setScoreInDB();
+        if (moveStatus && MusicManager.BGMusic)
+        {
+            moveStatus = false;
+            return;
+        }
+        MusicManager.pause();
+        MusicManager.BGMusic = false;
     }
 
     @Override
     protected void onStop() {
-    //    MusicManager.pause();
         super.onStop();
+        if (moveStatus && MusicManager.BGMusic)
+        {
+            moveStatus = false;
+            return;
+        }
+        MusicManager.BGMusic = false;
+        MusicManager.pause();
     }
 
     @Override
@@ -187,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void playNow() {
+        moveStatus = true;
         setPrefes();
         Intent intent = new Intent(this, game_activity.class);
         startActivity(intent);
