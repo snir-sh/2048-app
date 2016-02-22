@@ -127,22 +127,12 @@
             android:layout_height="80px"
             android:background="#cdcdcd"
             android:textAlignment="center"
-            android:layout_weight=".5"
+            android:layout_weight="1"
             android:padding="1px"
             tools:ignore="Suspicious0dp"
             android:dropDownSelector="#fed0d0" />
 
-        <Spinner
-            android:id="@+id/targetSpinner"
-            android:layout_width="0dp"
-            android:padding="1px"
-            android:layout_height="80px"
-            android:background="#cdcdcd"
-            android:textAlignment="center"
-            android:layout_weight=".5"
-            tools:ignore="Suspicious0dp"
-            android:dropDownSelector="#fed0d0"
-            android:layout_gravity="center_horizontal" />
+
 
 
     </LinearLayout>

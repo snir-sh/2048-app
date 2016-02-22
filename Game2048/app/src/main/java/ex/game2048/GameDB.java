@@ -10,7 +10,7 @@ public class GameDB extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "AppTimeEntries.db";
     private static final String TABLE_NAME = "SCORES";
     private static final String COL_SIZE = "size";
-    private static final String COL_TARGET = "target";
+
     private static final String COL_BSCORE = "score";
 
 
@@ -23,9 +23,8 @@ public class GameDB extends SQLiteOpenHelper{
         db.execSQL(
                 "CREATE TABLE " + TABLE_NAME  + " ( " +
                         COL_SIZE + " INTEGER," +
-                        COL_TARGET + " INTEGER," +
                         COL_BSCORE + " INTEGER," +
-                        "primary key (" + COL_SIZE + "," + COL_BSCORE +"));"
+                        "primary key (" + COL_SIZE + "));"
         );
     }
 

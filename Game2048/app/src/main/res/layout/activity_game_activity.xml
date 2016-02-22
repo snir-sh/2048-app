@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="2048"
         android:id="@+id/logoTXT"
-        android:padding="70px"
+        android:padding="40sp"
         android:layout_marginTop="40px"
         android:layout_marginLeft="20px"
         android:shadowColor="#f9e0e0"

@@ -26,12 +26,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean LayoutHidden = true;
     private Spinner squaresSpin, targetSpin;
     private SharedPreferences preferences; //SharedPreferences for the settings and more
-    private final int DEFAULT_TARGET = 1; //0 mean 1024, 1 mean 2048, 2 mean 4096 --- only on the spinner
+    //private final int DEFAULT_TARGET = 1; //0 mean 1024, 1 mean 2048, 2 mean 4096 --- only on the spinner
     private final int DEFAULT_SQURES = 0; //0 mean 4x4, 1 mean 5x5, 2 mean 6x6  --- only on the spinner
     private GameDAL DAL;
     private TextView scoreTxt, bestTxt;
     private LinearLayout BottomLayout;
-    private int Bscore, target , size;
+    private int Bscore, size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MuteCMD = (ImageView)findViewById(R.id.MuteCMD);
         InfoCMD = (ImageView)findViewById(R.id.InfoCMD);
         ConfCMD = (ImageView)findViewById(R.id.ConfCMD);
-        targetSpin = (Spinner)findViewById(R.id.targetSpinner);
+//        targetSpin = (Spinner)findViewById(R.id.targetSpinner);
         squaresSpin = (Spinner)findViewById(R.id.squersSpinner);
         scoreTxt = (TextView)findViewById(R.id.scoreTxt);
         BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
@@ -51,17 +51,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DAL = new GameDAL(this);
 
         String[] squareArray = getResources().getStringArray(R.array.squersSpinner_arr);
-        String[] targetArray = getResources().getStringArray(R.array.targetSpinner_arr);
+//        String[] targetArray = getResources().getStringArray(R.array.targetSpinner_arr);
 
         ArrayAdapter<String> squareAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,squareArray);
-        ArrayAdapter<String> targetAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,targetArray);
+//        ArrayAdapter<String> targetAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,targetArray);
 
         squaresSpin.setAdapter(squareAdapter);
-        targetSpin.setAdapter(targetAdapter);
+//        targetSpin.setAdapter(targetAdapter);
 
         getPrefes();
         squaresSpin.setSelection(getBoardSize(size));
-        targetSpin.setSelection(getBoardTarget(target));
+//        targetSpin.setSelection(getBoardTarget(target));
 
         PlayNow.setOnClickListener(this);
         MuteCMD.setOnClickListener(this);
@@ -69,13 +69,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ConfCMD.setOnClickListener(this);
 
         squaresSpin.setOnItemSelectedListener(this);
-        targetSpin.setOnItemSelectedListener(this);
+//        targetSpin.setOnItemSelectedListener(this);
 
         MuteCMD.setBackgroundResource(R.drawable.unmute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
         playMusic();
         getScoreFromDB();
-     //   showScore();
+        showScore();
     }
 
     @Override
@@ -117,23 +117,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("score","onResume");
         getPrefes();
         setScoreInDB();
-     //   getScoreFromDB();
-    //    showScore();
+        showScore();
         squaresSpin.setSelection(getBoardSize(size));
-        targetSpin.setSelection(getBoardTarget(target));
+//        targetSpin.setSelection(getBoardTarget(target));
         super.onResume();
     }
 
     private void getPrefes() {
         Bscore = preferences.getInt("best_score",0);
         size = preferences.getInt("board_size", 4);
-        target = preferences.getInt("board_target",2048);
-        Log.d("score","getPrefes Bscore: " + Bscore + " size " + size + " target " + target);
+//        target = preferences.getInt("board_target",2048);
+        Log.d("score","getPrefes Bscore: " + Bscore + " size " + size);
     }
 
     private void getScoreFromDB() {
-//        getPrefes();
-        Bscore = DAL.getBscore(size, target);
+        Bscore = DAL.getBscore(size);
         Log.d("score", "getScoreFromDB " + Bscore);
         if (Bscore == -1)
             Bscore = 0;
@@ -143,10 +141,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setScoreInDB() {
         int bScore = preferences.getInt("best_score",0);
         int board_size = preferences.getInt("board_size", 4);
-        int target = preferences.getInt("board_target",2048);
+//        int target = preferences.getInt("board_target",2048);
 
         Log.d("score", "setScoreinDB " + bScore);
-        DAL.insert(board_size, target, bScore);
+        DAL.insert(board_size, bScore);
     }
 
     @Override
@@ -165,13 +163,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-     //   getScoreFromDB();
 
         //Configuring size and target after changes
         size = getBoardSize(squaresSpin.getSelectedItemPosition());
-        target = getBoardTarget(targetSpin.getSelectedItemPosition());
+//        target = getBoardTarget(targetSpin.getSelectedItemPosition());
 
         setPrefes();
+        getScoreFromDB();
+        showScore();
+
+
     }
 
     @Override
@@ -196,18 +197,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return DEFAULT_SQURES;
     }
 
-    private int getBoardTarget(int t)
-    {
-        switch (t) {
-            case 0: return 1024;
-            case 1: return 2048;
-            case 2: return 4096;
-            case 1024: return 0;
-            case 2048: return 1;
-            case 4096: return 2;
-        }
-        return DEFAULT_TARGET;
-    }
+//    private int getBoardTarget(int t)
+//    {
+//        switch (t) {
+//            case 0: return 1024;
+//            case 1: return 2048;
+//            case 2: return 4096;
+//            case 1024: return 0;
+//            case 2048: return 1;
+//            case 4096: return 2;
+//        }
+//        return DEFAULT_TARGET;
+//    }
 
     private void showScore()
     {
@@ -240,11 +241,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //    getScoreFromDB();
 
         size = getBoardSize(squaresSpin.getSelectedItemPosition());
-        target = getBoardTarget(targetSpin.getSelectedItemPosition());
+//        target = getBoardTarget(targetSpin.getSelectedItemPosition());
         getScoreFromDB();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("board_size", size);
-        editor.putInt("board_target", target);
+//        editor.putInt("board_target", target);
         editor.putInt("best_score", Bscore);
         editor.apply();
     }
