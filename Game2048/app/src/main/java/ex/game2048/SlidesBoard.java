@@ -1,16 +1,14 @@
 package ex.game2048;
-
-import android.util.Log;
-
 import java.util.Random;
 
-
+/* This class responsible of the logic algorithm */
 public class SlidesBoard {
     public static final int EMPTY = 0;
     private final int SIZE, N;
     private int[][] board;
     private int emptyRow, emptyCol;
 	private int score;
+
 
 
 

@@ -16,13 +16,15 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
 
     private static GameView gameView;
     private SharedPreferences preferences; //SharedPreferences for the settings and more
-    private TextView best_scoreTXT, current_scoreTXT;
+    private TextView best_scoreTXT, current_scoreTXT;  // The texts in the activity
     private ImageView restart;
 
 
     private int Bscore, Cscore; // The game scores
     private ImageView MuteCMD;
 
+
+    // Initialize all the activity elements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +51,11 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     }
 
 
+    // Get all data from preferences and show in the text
     private void getScoreFromPreferences()
     {
         preferences =  getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         Bscore = preferences.getInt("best_score", Settings.DEFAULT_SCORE);
-        Log.d("score", "Bscore in game: " + Bscore);
-
         String current = "Current\n" + 0;
         String best = "Best\n" + Bscore;
         current_scoreTXT.setText(current);
@@ -74,7 +75,9 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         else
             MuteCMD.setBackgroundResource(R.drawable.mute2);
     }
-    
+
+
+    // Sends all touch events in the view to the game view class and update according the answer
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(gameView.onTouchEvent(event))
@@ -91,7 +94,6 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
 
             }
         }
-
         gameView.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
@@ -113,6 +115,8 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         MusicManager.pause();
         super.onStop();
     }
+
+    // Listener for touch events if we need to restart the game or to mute the music
     @Override
     public void onClick(View v) {
         if(v.getId() == restart.getId())
@@ -121,6 +125,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
             muteUnMute();
     }
 
+//    Function that checks if we need to mute or not and do it
     private void muteUnMute() {
         if (Integer.parseInt(MuteCMD.getTag().toString()) == 1)
         {
@@ -137,6 +142,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
         }
     }
 
+    //  Restart the game
     private void restartGame() {
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
         dlgAlert.setMessage("Are you sure you want to restart the game?");

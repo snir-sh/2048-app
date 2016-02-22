@@ -7,6 +7,8 @@
     android:padding="10px"
     android:layout_margin="10px">
 
+
+    <!-- Label that shows the board size-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/PlayLayout">
 
+        <!-- Image view to show the game logo-->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,27 +31,28 @@
         android:id="@+id/IconsLayout"
         android:layout_below="@+id/TopLayout">
 
+        <!--Image view for the settings -->
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/ConfCMD"
-            android:src="@drawable/conf2"
-            />
+            android:src="@drawable/conf2" />
 
+        <!--Image view for the information-->
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:id="@+id/InfoCMD"
-            android:src="@drawable/info2"
-            />
+            android:src="@drawable/info2" />
 
+        <!-- Image view for restarting the score-->
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:id="@+id/DeleteCMD"
-            android:src="@drawable/delete2"
-            />
+            android:src="@drawable/delete2" />
 
+        <!-- Image view for the mute button-->
         <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -68,6 +70,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true">
 
+        <!-- Best score label-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,6 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!-- Text view to she the score-->
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -104,12 +108,14 @@
         android:layout_above="@+id/BottomLayout"
         android:gravity="center">
 
+        <!-- Image view to start the game-->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/playnow"
             android:src="@drawable/playnow" />
     </LinearLayout>
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -121,6 +127,7 @@
         android:padding="10dp"
         android:weightSum="1">
 
+        <!-- Spinner that shows the board size  i can choose-->
         <Spinner
             android:id="@+id/squersSpinner"
             android:layout_width="0dp"
@@ -131,9 +138,6 @@
             android:padding="1px"
             tools:ignore="Suspicious0dp"
             android:dropDownSelector="#fed0d0" />
-
-
-
 
     </LinearLayout>
 

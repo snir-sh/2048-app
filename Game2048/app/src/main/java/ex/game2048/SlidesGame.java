@@ -1,5 +1,5 @@
 package ex.game2048;
-
+// This class is the game engine, all the function in this class are responsible of the logic.
 public class SlidesGame {
     private SlidesBoard board;
     public final int SIZE;
@@ -13,23 +13,19 @@ public class SlidesGame {
     public void moveDown()
     {
     	board.doDown();
-//    	board.printBoard();
     }
     public void moveUp()
     {
     	board.doUp();
-//    	board.printBoard();
     }
     public void moveLeft()
     {
     	board.doLeft();
-//    	board.printBoard();
     	
     }
     public void moveRight()
     {
     	board.doRight();
-//    	board.printBoard();
     }
     
     public boolean gameOver()

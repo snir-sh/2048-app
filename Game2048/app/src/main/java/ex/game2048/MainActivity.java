@@ -44,9 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
         preferences = getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         DAL = new GameDAL(this);
-
-        Settings.initializeSettings(getApplicationContext());
-
         // Set the spinner
         String[] squareArray = getResources().getStringArray(R.array.squersSpinner_arr);
         ArrayAdapter<String> squareAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,squareArray);
@@ -173,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStop() {
-        MusicManager.pause();
+    //    MusicManager.pause();
         super.onStop();
     }
 

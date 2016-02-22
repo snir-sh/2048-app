@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.LinkedList;
 
@@ -46,14 +47,12 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
         init(context);
     }
 
-    // Initialize the settings
+    // Initialize the settings of the view
     private void init(Context context)
     {
         preferences = context.getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         board_size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
         game = new SlidesGame(board_size);
-
-
         myPaint = new Paint();
         myPaint.setDither(true);
         myPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -64,8 +63,6 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
         mDetector = new GestureDetectorCompat(getContext(),this);
 
     }
-
-
 
     // Initialize the screen params
     @Override
@@ -94,6 +91,11 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
             }
 
         }
+        if (game.gameOver()) {
+            Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+            reStartGame();
+        }
+
     }
 
     // Create the board objects of the game into a linked list
@@ -130,9 +132,6 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
         game_board = new GameRectangle(right,right,width+right, width+right,0,board_paint,-1);
 
     }
-
-
-
 
 
     // Get the angle of the user swipe

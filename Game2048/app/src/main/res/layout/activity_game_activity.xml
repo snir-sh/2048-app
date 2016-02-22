@@ -8,7 +8,7 @@
 
 
 
-
+<!--Game view that show the ui-->
     <ex.game2048.GameView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,6 +20,7 @@
 
         />
 
+    <!-- Text view that show the best score-->
     <TextView
         android:layout_width="200px"
         android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
         android:textAlignment="center"
         android:gravity="right"
         />
+    <!-- Text view that show the current score-->
     <TextView
         android:layout_width="200px"
         android:layout_height="wrap_content"
@@ -48,6 +50,8 @@
         android:layout_marginEnd="110dp"
         android:textAlignment="center"/>
 
+
+    <!-- Text view that shows the game name / logo-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,6 +68,8 @@
         android:gravity="left"
         android:layout_alignParentStart="true" />
 
+
+    <!-- Image view for the restart button-->
     <ImageView
         android:layout_width="100px"
         android:layout_height="100px"
@@ -73,14 +79,14 @@
         android:layout_alignEnd="@+id/best_scoreTXT"
         android:layout_marginTop="15px"/>
 
+
+    <!-- Image view for the mute option-->
     <ImageView
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:id="@+id/MuteCMD"
         android:tag="1"
-
         android:layout_alignTop="@+id/restart_icon"
         android:layout_toStartOf="@+id/restart_icon" />
-
 
 </RelativeLayout>
