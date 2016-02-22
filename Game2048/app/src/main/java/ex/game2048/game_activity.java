@@ -1,19 +1,16 @@
 package ex.game2048;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.gesture.GestureOverlayView;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class game_activity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
@@ -119,11 +116,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     @Override
     public void onClick(View v) {
         if(v.getId() == restart.getId())
-        {
-            String current = "Current\n" + Cscore;
-            current_scoreTXT.setText(current);
-            gameView.reStartGame();
-        }
+            restartGame();
         else if(v.getId() == MuteCMD.getId())
             muteUnMute();
     }
@@ -142,6 +135,24 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
             MuteCMD.setTag(1);
         }
+    }
+
+    private void restartGame() {
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+        dlgAlert.setMessage("Are you sure you want to restart the game?");
+        dlgAlert.setTitle("Restart");
+        dlgAlert.setNegativeButton("No", null);
+        dlgAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String current = "Current\n" + Cscore;
+                current_scoreTXT.setText(current);
+                gameView.reStartGame();
+            }
+        });
+        dlgAlert.setCancelable(true);
+        dlgAlert.create().show();
+
+
     }
 
 }

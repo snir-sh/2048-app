@@ -2,6 +2,7 @@ package ex.game2048;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private ImageView PlayNow;
-    private ImageView MuteCMD, ConfCMD, InfoCMD;
+    private ImageView MuteCMD, ConfCMD, InfoCMD, DelCMD;
     private boolean MuteStatus = false;
     private boolean LayoutHidden = true;
     private Spinner squaresSpin;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView scoreTxt, bestTxt;
     private LinearLayout BottomLayout;
     private int Bscore, size;
+    private boolean resetScore = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MuteCMD = (ImageView)findViewById(R.id.MuteCMD);
         InfoCMD = (ImageView)findViewById(R.id.InfoCMD);
         ConfCMD = (ImageView)findViewById(R.id.ConfCMD);
+        DelCMD = (ImageView)findViewById(R.id.DeleteCMD);
+
         squaresSpin = (Spinner)findViewById(R.id.squersSpinner);
         scoreTxt = (TextView)findViewById(R.id.scoreTxt);
         BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MuteCMD.setOnClickListener(this);
         InfoCMD.setOnClickListener(this);
         ConfCMD.setOnClickListener(this);
+        DelCMD.setOnClickListener(this);
 
         squaresSpin.setOnItemSelectedListener(this);
         if (MusicManager.BGMusic)
@@ -80,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             muteUnMute();
         else if(v.getId() == InfoCMD.getId())
             infoDialog();
+        else if (v.getId() == DelCMD.getId())
+            deleteScore();
     }
 
     private void playMusic() {
@@ -144,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setScoreInDB() {
         int bScore = preferences.getInt("best_score",0);
         int board_size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
+        if(resetScore)
+        {
+            bScore = Bscore = 0;
+            resetScore = false;
+        }
         DAL.insert(board_size, bScore);
     }
 
@@ -200,7 +212,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void infoDialog()
     {
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-        dlgAlert.setMessage("infooooooooooooooooooooooooooooooooooooo");
+        dlgAlert.setMessage("This application based on the famous game 2048.\n" +
+                "In this game the player can choose the number of the squares on the board,\n +" +
+                "and enjoy listening to Game of Thrones theme song.");
         dlgAlert.setTitle("Information");
         dlgAlert.setPositiveButton("OK", null);
         dlgAlert.setCancelable(true);
@@ -217,6 +231,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BottomLayout.setVisibility(LinearLayout.INVISIBLE);
             LayoutHidden = true;
         }
+    }
+
+    private void deleteScore() {
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+        dlgAlert.setMessage("Are you sure you want to delete best score?");
+        dlgAlert.setTitle("Delete best score");
+        dlgAlert.setNegativeButton("No", null);
+        dlgAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                resetScore = true;
+                setScoreInDB();
+                showScore();
+            }
+        });
+        dlgAlert.setCancelable(true);
+        dlgAlert.create().show();
+
+
     }
 
 }
