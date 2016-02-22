@@ -18,7 +18,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     private SharedPreferences preferences; //SharedPreferences for the settings and more
     private TextView best_scoreTXT, current_scoreTXT;
     private ImageView restart;
-    private final int DEFAULT_SCORE = 0;
+
 
     private int Bscore, Cscore; // The game scores
     private ImageView MuteCMD;
@@ -52,7 +52,7 @@ public class game_activity extends AppCompatActivity implements View.OnTouchList
     private void getScoreFromPreferences()
     {
         preferences =  getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
-        Bscore = preferences.getInt("best_score", DEFAULT_SCORE);
+        Bscore = preferences.getInt("best_score", Settings.DEFAULT_SCORE);
         Log.d("score", "Bscore in game: " + Bscore);
 
         String current = "Current\n" + 0;

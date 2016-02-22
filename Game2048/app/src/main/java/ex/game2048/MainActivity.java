@@ -19,12 +19,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageView PlayNow;
     private ImageView MuteCMD, ConfCMD, InfoCMD, DelCMD;
-    private boolean MuteStatus = false;
     private boolean LayoutHidden = true;
-    private Spinner squaresSpin;
+    private Spinner squaresSpin; // spinner to choose the board size
     private SharedPreferences preferences; //SharedPreferences for the settings and more
     private GameDAL DAL;
-    private TextView scoreTxt, bestTxt;
+    private TextView scoreTxt;
     private LinearLayout BottomLayout;
     private int Bscore, size;
     private boolean resetScore = false;
@@ -43,38 +42,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         squaresSpin = (Spinner)findViewById(R.id.squersSpinner);
         scoreTxt = (TextView)findViewById(R.id.scoreTxt);
         BottomLayout = (LinearLayout)findViewById(R.id.BottomLayout);
-        bestTxt = (TextView)findViewById(R.id.BestTxt);
         preferences = getSharedPreferences("prefees@!2048", Context.MODE_PRIVATE);
         DAL = new GameDAL(this);
 
         Settings.initializeSettings(getApplicationContext());
 
-
+        // Set the spinner
         String[] squareArray = getResources().getStringArray(R.array.squersSpinner_arr);
-
         ArrayAdapter<String> squareAdapter  = new CustomArrayAdapter(this,R.layout.spinner_row,squareArray);
-
         squaresSpin.setAdapter(squareAdapter);
-        getPrefes();
-        squaresSpin.setSelection(getBoardSize(size));
 
+        squaresSpin.setSelection(getBoardSize(size));
+        // Set the listeners to all the buttons
         PlayNow.setOnClickListener(this);
         MuteCMD.setOnClickListener(this);
         InfoCMD.setOnClickListener(this);
         ConfCMD.setOnClickListener(this);
         DelCMD.setOnClickListener(this);
-
         squaresSpin.setOnItemSelectedListener(this);
+
+        // Check if the music button is mute or not
         if (MusicManager.BGMusic)
             MuteCMD.setBackgroundResource(R.drawable.unmute2);
         else
             MuteCMD.setBackgroundResource(R.drawable.mute2);
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
+
         playMusic();
+        getPrefes();
         getScoreFromDB();
         showScore();
     }
 
+    // Check witch button has been clicked
     @Override
     public void onClick(View v) {
         if(v.getId() == PlayNow.getId())
@@ -126,11 +126,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BottomLayout.setVisibility(LinearLayout.INVISIBLE);
     }
 
+    // Get data from the shared preferences
     private void getPrefes() {
         Bscore = preferences.getInt("best_score",0);
         size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
     }
 
+    // Set data in the prefernces
     private void setPrefes() {
 
         size = getBoardSize(squaresSpin.getSelectedItemPosition());
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.apply();
     }
 
+    // Get the score from the db according to the board size
     private void getScoreFromDB() {
         Bscore = DAL.getBscore(size);
         if (Bscore == -1)
@@ -148,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    // Set the best score in the database
     private void setScoreInDB() {
         int bScore = preferences.getInt("best_score",0);
         int board_size = preferences.getInt("board_size", Settings.DEFAULT_BOARD_SIZE);
@@ -186,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void playNow() {
+        setPrefes();
         Intent intent = new Intent(this, game_activity.class);
         startActivity(intent);
     }
@@ -213,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
         dlgAlert.setMessage("This application based on the famous game 2048.\n" +
-                "In this game the player can choose the number of the squares on the board,\n +" +
+                "In this game the player can choose the number of the squares on the board,\n" +
                 "and enjoy listening to Game of Thrones theme song.");
         dlgAlert.setTitle("Information");
         dlgAlert.setPositiveButton("OK", null);

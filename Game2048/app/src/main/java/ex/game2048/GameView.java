@@ -7,14 +7,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -217,6 +213,7 @@ public class GameView extends View implements GestureDetector.OnGestureListener{
 
     }
 
+    // check swipe event
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float x1,x2,y1,y2 ;
